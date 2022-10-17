@@ -4,5 +4,5 @@ Currently it will only go one directory deep into the directory. I was trying to
 
 To use:
 
-$ sudo chmod +x setup
+$ sudo chmod +x setup \n
 $ sudo ./setup
