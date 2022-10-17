@@ -1,0 +1,90 @@
+
+#!/usr/bin/env python3
+
+import sys
+import os
+
+
+class LibraryFinder:
+
+    def __init__(self):
+        self.LibaryFinder()
+
+
+    def LibaryFinder(self):
+
+        fileList = os.popen("ls ~/learning_cpp")
+
+        self.libraries = []
+
+        for file in sys.argv[3:]:
+
+            if "*" in file:
+                file = file.replace("/*","") # get rid of the /*
+
+            try :
+                with open(file,"r") as f:
+                    lines = f.readlines()
+                    for line in lines:
+                        if "import" in line:
+                            print(line)
+                            words = line.split()
+                            index = words.index("import")
+
+                            try:
+                                if words[index-2] == "from":
+                                    index -= 1
+                                else:
+                                    index += 1
+
+                            except IndexError:
+                                index += 1
+
+                            library = words[index]
+                            print(library)
+                            self.libraries
+
+                            while True:
+
+                                if "," in library :
+                                    for lib in library.split(","):
+                                        self.addLibrary(lib)
+
+                                elif (index+1)>=len(words):
+                                    break
+
+                                elif "," in words[index+1]:
+                                    self.libraries.append(library)
+                                    index += 2
+                                    library = words[index]
+
+                                else :
+                                    self.addLibrary(library)
+                                    break
+
+            except UnicodeDecodeError:
+                print("Cannot process ",file)
+
+
+    def addLibrary(self,library):
+
+        for name in os.listdir(sys.argv[1]): # checks to not install classes youve written and imported
+            if library in name:
+                return 0
+
+        if library in self.libraries:
+            return 0 
+        else:
+            self.libraries.append(library)
+
+
+if __name__ == "__main__":
+    libraries = LibraryFinder()
+
+    print(libraries.libraries)
+    
+    for module in libraries.libraries:
+        installString = "pip3 install " + module
+        print(module, "done")
+        os.system(installString)
+
