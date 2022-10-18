@@ -8,12 +8,40 @@ import os
 class LibraryFinder:
 
     def __init__(self):
+
+        self.GetFileNames()
+        print(self.fileList)
         self.LibaryFinder()
 
 
-    def LibaryFinder(self):
+    def GetFileNames(self):
+        directories = os.listdir(sys.argv[1])
 
-        fileList = os.popen("ls ~/learning_cpp")
+        self.fileList = []
+
+        while True:
+            for dir in directories:
+                if self.checkDir(dir):
+                    location = sys.argv[1]+dir
+                    directories = directories + os.listdir(location)
+                    directories.remove(dir)
+                else:
+                    directories.remove(dir)
+                    self.fileList.append(dir)
+            if len(directories) == 0:
+                break
+
+    def checkDir(self,name):
+        try:
+            location=sys.argv[1]+name
+            newListDir = os.listdir(location)
+            return True
+
+        except (NotADirectoryError,FileNotFoundError) as e:
+            return False
+
+
+    def LibaryFinder(self):
 
         self.libraries = []
 
@@ -68,7 +96,7 @@ class LibraryFinder:
 
     def addLibrary(self,library):
 
-        for name in os.listdir(sys.argv[1]): # checks to not install classes youve written and imported
+        for name in self.fileList: # checks to not install classes youve written and imported
             if library in name:
                 return 0
 
