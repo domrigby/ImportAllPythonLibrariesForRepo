@@ -1,36 +1,7 @@
 #! /bin/bash
 
-oldIFS="$IFS" # save the system internal field seperator
-
 dirName=${1?Error: no file}
 
 echo $dirName
 
-fileList=()
-
-# I tried to write this in bash for fun but really I should have written in python
-
-for name in "$dirName"/*
-do
-    # need to check if its a file or a directory
-    # running ls on a file just returns that file name
-
-    var="$name"/*
-
-    echo "here"
-    echo ${name[$len]}
-
-    IFS=' ' # change internal field seperator so that
-
-    read -ra fileArray<<<"$var" # read var as a string
-
-    for file in $fileArray
-    do
-        fileList+=$file" "
-    done
-
-done
-
-python3 fileRead $dirName $fileList
-
-IFS=$oldIFS
+python3 fileRead $dirName
